@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native'
-import { getDeck } from '../data'
+import {View, Text, TouchableOpacity, StyleSheet, Animated} from 'react-native'
+import { getDeck, removeDeck } from '../data'
 
 class DeckView extends Component {
 
     state = {
         cards: [],
-        deckName: ''
+        deckName: '',
+        pos: new Animated.ValueXY({x: -300, y: 0})
     }
 
     componentDidMount(){
@@ -15,6 +16,14 @@ class DeckView extends Component {
                 this.setState({cards: deck.questions, deckName: this.props.route.params.deckName})
             })
           });
+          Animated.spring(this.state.pos, {
+              toValue: {x: 0, y: 0},
+              delay: 300,
+              friction: 10,
+              tension: 15,
+              useNativeDriver: false
+          }).start()
+
     }
 
 
@@ -22,7 +31,7 @@ class DeckView extends Component {
     render() {
         const { deckName, cards } = this.state
         return (
-            <View style={styles.container}>
+            <Animated.View style={[styles.container, this.state.pos.getLayout()]}>
                 <View style={styles.card} >
                     <Text style={[styles.text, {fontSize: 25, padding: 20}]}>{deckName}</Text>
                     <Text style={[styles.text, {padding: 20, alignSelf: 'center'}]}>{cards.length} Cards</Text>                    
@@ -34,11 +43,11 @@ class DeckView extends Component {
                     <TouchableOpacity style={[styles.btn, {backgroundColor: 'blue'}]} onPress={()=> this.props.navigation.navigate("Start Quiz", {cards})}>
                         <Text style={styles.text}>Start Quiz</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.btn, {backgroundColor: 'red'}]} >
+                    <TouchableOpacity style={[styles.btn, {backgroundColor: 'red'}]} onPress={()=> {removeDeck(deckName); this.props.navigation.navigate("Decks")}} >
                         <Text style={styles.text}>Delete Deck</Text>                    
                     </TouchableOpacity>
                 </View>
-            </View>
+            </Animated.View>
         )
     }
 }

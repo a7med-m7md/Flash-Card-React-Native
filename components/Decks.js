@@ -16,9 +16,14 @@ class Decks extends Component {
         this.unsubscribe = this.props.navigation.addListener('tabPress', e => {
             this.handle()
       });
-      const unsubscribe = this.props.navigation.addListener('focus', e => {
+      this.unsubscribe2 = this.props.navigation.addListener('focus', e => {
             this.handle()
       });
+    }
+
+    componentWillUnmount(){
+        this.unsubscribe()
+        this.unsubscribe2()
     }
 
 
@@ -30,11 +35,15 @@ class Decks extends Component {
     
     render() {
         const {data} = this.state 
+        console.log(data)
         const keys = data[0] ? Object.keys(data[0]) : null
         return data[0] ? 
                 ( <ScrollView>
                     {keys.map(key=> (<TouchableOpacity key={key} style={styles.container} 
-                                                onPress={()=> this.props.navigation.push("Main Deck", {deckName: key, cards: data[0][key].questions})}>
+                                                onPress={()=> this.props.navigation.push("Main Deck", 
+                                                {deckName: key, cards: data[0][key].questions, animations: {push: {content: {translationX: {from: require('react-native').Dimensions.get('window').width,to: 0, duration: 300}}}}},
+                                                
+                                                )}>
                                         <Text  style={styles.name}>{key}</Text>
                                         <Text  style={styles.name}>{data[0][key].questions.length}</Text>
                                     </TouchableOpacity>
@@ -42,7 +51,7 @@ class Decks extends Component {
                                         )
                     }               
                 </ScrollView> )
-                : (<View><Text>Error</Text></View>)
+                : (<View style={styles.noItems}><Text>No decks yet, Add your decks</Text></View>)
     }
 }
 
@@ -61,7 +70,11 @@ const styles = StyleSheet.create({
     },
     number: {
         fontSize: 18,
-    }
+    },
+    noItems: {
+        fontSize: 25, 
+        flex: 1, justifyContent: 'center',
+         alignContent: 'center'}
 })
 
 export default Decks

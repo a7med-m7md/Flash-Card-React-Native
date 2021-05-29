@@ -1,8 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const KEY = "flashcard:app"
-
-
+   
 
 export const getDecks = ()=>{
     return AsyncStorage.getItem(KEY)
@@ -29,4 +28,18 @@ export const addCardToDeck = async (title, card)=>{
     let decks = await getDecks()
     decks = {...JSON.parse(decks),  ...data }
     await AsyncStorage.setItem(KEY, JSON.stringify(decks))
+}
+
+
+export function removeDeck(deckId) {
+    return getDecks()
+    .then((data) => {
+        data = JSON.parse(data)
+        if(data.length == 1)
+            data = [null]
+        else
+            delete data[deckId]
+        
+        AsyncStorage.setItem(KEY, JSON.stringify(data))
+    })
 }

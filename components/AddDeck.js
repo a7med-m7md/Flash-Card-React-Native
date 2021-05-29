@@ -20,7 +20,6 @@ class AddDeck extends Component {
                 <TouchableOpacity style={styles.btn} onPress={this.handleDeck}>
                     <Text style={[styles.text, {color: 'white'}]}>Create Deck</Text>
                 </TouchableOpacity>
-                <Text>{this.state.title}</Text>
             </View>
         )
     }

@@ -12,13 +12,13 @@ class Quiz extends Component {
 
     componentDidMount(){
         this.setState({cards: this.props.route.params.cards})
+        clearLocalNotification().then(setLocalNotification)
     }
 
     handleQuestion = (isCorrect)=>{
         isCorrect? 
             this.setState({currentQuestion: this.state.currentQuestion+1, score: this.state.score +1, displayAnswer: false}) :
                 this.setState({currentQuestion: this.state.currentQuestion+1, displayAnswer: false}) 
-        checkForToday && clearLocalNotification().then(setLocalNotification)
     }
 
     startOver = ()=>{

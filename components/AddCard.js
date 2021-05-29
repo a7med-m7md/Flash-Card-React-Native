@@ -19,7 +19,7 @@ class AddCard extends Component {
             <View style={styles.container}>
                 <TextInput style={styles.input} value={this.state.question} placeholder="Question" onChangeText={(question)=>this.setState({question})}/>
                 <TextInput style={styles.input} value={this.state.answer} placeholder="Answer"  onChangeText={(answer)=>this.setState({answer})}/>
-                <TouchableOpacity style={styles.btn} onPress={()=>{this.handleSubmit(deckName);sendNotificationImmediately();this.props.navigation.navigate('Main Deck', {deckName})}}>
+                <TouchableOpacity style={styles.btn} onPress={()=>{this.handleSubmit(deckName);this.props.navigation.navigate('Main Deck', {deckName})}}>
                     <Text style={styles.text}>Submit</Text>
                 </TouchableOpacity>
             </View>
